@@ -62,7 +62,7 @@ const s = StyleSheet.create({
   last4Input: {
   },
   zipInput: {
-    width: 60,
+    width: 80,
     marginLeft: 10,
   },
   input: {
@@ -92,7 +92,7 @@ export default class LiteCreditCardInput extends Component {
       number: "1234 5678 1234 5678",
       expiry: "MM/YY",
       cvc: "CVC",
-      zip: "ZIP"
+      postalCode: "ZIP"
     },
     validColor: "",
     invalidColor: "red",
@@ -211,9 +211,9 @@ export default class LiteCreditCardInput extends Component {
             showRightPart ? s.expanded : s.hidden
           ]}>
             <CCInput
-              {...this._inputProps("zip")}
+              {...this._inputProps("postalCode")}
               keyboardType="numeric"
-              containerStyle={s.zipInput}
+              containerStyle={s.zipInput}              
             />
           </View>
         </View>
