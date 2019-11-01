@@ -25,38 +25,45 @@ const s = StyleSheet.create({
     overflow: "hidden",
   },
   icon: {
-    width: 48,
-    height: 40,
+    width: 28,
+    height: 20,
   },
   expanded: {
     flex: 1,
   },
   hidden: {
     width: 0,
+    overflow: "hidden",
   },
   leftPart: {
-    overflow: "hidden",
+    flexDirection: "row",
+    marginLeft: "auto",
   },
   rightPart: {
-    overflow: "hidden",
     flexDirection: "row",
+    marginLeft: "auto",
   },
   last4: {
     flex: 1,
-    justifyContent: "center",
+    marginLeft: 37,
+    marginRight: 10,
   },
   numberInput: {
     width: INFINITE_WIDTH,
+    marginLeft: 10,
+    marginRight: 10,
   },
   expiryInput: {
-    width: 80,
+    width: 60,
   },
   cvcInput: {
-    width: 80,
+    width: 40,
   },
   last4Input: {
+  },
+  zipInput: {
     width: 60,
-    marginLeft: 20,
+    marginLeft: 10,
   },
   input: {
     height: 40,
@@ -85,6 +92,7 @@ export default class LiteCreditCardInput extends Component {
       number: "1234 5678 1234 5678",
       expiry: "MM/YY",
       cvc: "CVC",
+      zip: "ZIP"
     },
     validColor: "",
     invalidColor: "red",
@@ -155,40 +163,39 @@ export default class LiteCreditCardInput extends Component {
       }
     } = this.props;
 
-    const showRightPart = focused && focused !== "number";
-
+    const validNumber = numberStatus === "valid"
+    const showRightPart = focused && focused !== "number" && validNumber;
+    
     return (
       <View style={s.container}>
-        <View style={[
-          s.leftPart,
-          showRightPart ? s.hidden : s.expanded,
-        ]}>
+        <Image style={s.icon} source={Icons[this._iconToShow()]} />
+
+        <View style={[showRightPart ? s.hidden : s.expanded]}>
           <CCInput
             {...this._inputProps("number")}
             keyboardType="numeric"
             containerStyle={s.numberInput}
           />
         </View>
-        <TouchableOpacity onPress={showRightPart ? this._focusNumber : this._focusExpiry}>
-          <Image style={s.icon} source={Icons[this._iconToShow()]} />
-        </TouchableOpacity>
-        <View style={[
-          s.rightPart,
-          showRightPart ? s.expanded : s.hidden,
-        ]}>
+
+        <View style={[s.rightPart]}>
           <TouchableOpacity
             onPress={this._focusNumber}
-            style={s.last4}
+            style={[
+              s.last4,
+              showRightPart ? s.expanded : s.hidden,
+            ]}
           >
             <View pointerEvents={"none"}>
               <CCInput field="last4"
                 keyboardType="numeric"
-                value={numberStatus === "valid" ? number.substr(number.length - 4, 4) : ""}
+                value={numberStatus ? number.substr(number.length - 4, 4) : ""}
                 inputStyle={[s.input, inputStyle]}
-                containerStyle={[s.last4Input]}
+                containerStyle={[s.last4Input, showRightPart ? s.expanded : s.hidden]}
               />
             </View>
           </TouchableOpacity>
+
           <CCInput
             {...this._inputProps("expiry")}
             keyboardType="numeric"
@@ -199,6 +206,16 @@ export default class LiteCreditCardInput extends Component {
             keyboardType="numeric"
             containerStyle={s.cvcInput}
           />
+          <View style={[
+            s.rightPart,
+            showRightPart ? s.expanded : s.hidden
+          ]}>
+            <CCInput
+              {...this._inputProps("zip")}
+              keyboardType="numeric"
+              containerStyle={s.zipInput}
+            />
+          </View>
         </View>
       </View>
     );
