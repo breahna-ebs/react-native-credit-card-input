@@ -35,7 +35,7 @@ export default function connectToState(CreditCardInput) {
       onFocus: () => {},
       requiresName: false,
       requiresCVC: true,
-      requiresPostalCode: false,
+      requiresPostalCode: true,
       validatePostalCode: (postalCode = "") => {
         return postalCode.match(/^\d{6}$/) ? "valid" :
                postalCode.length > 6 ? "invalid" :
